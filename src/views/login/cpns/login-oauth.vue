@@ -1,5 +1,5 @@
 <template>
-  <router-view></router-view>
+  <div>login-Oauth</div>
 </template>
 
 <script setup lang="ts"></script>
