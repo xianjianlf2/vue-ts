@@ -27,8 +27,7 @@ module.exports = {
         },
         changeOrigin: true
       }
-    },
-    open: true
+    }
   },
   configureWebpack: {
     plugins: [

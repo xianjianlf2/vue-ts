@@ -3,7 +3,8 @@ import { IAccount, IDataType, ILoginResult } from './types'
 
 enum LoginAPI {
   AccountLogin = '/login',
-  LoginUserInfo = '/users/'
+  LoginUserInfo = '/users/',
+  UserMenus = '/role/'
 }
 
 export function accountLoginRequest(account: IAccount) {
@@ -15,6 +16,14 @@ export function accountLoginRequest(account: IAccount) {
 
 export function requestUserInfoById(id: number) {
   return mxRequest.get<IDataType>({
-    url: LoginAPI.LoginUserInfo + id
+    url: LoginAPI.LoginUserInfo + id,
+    showLoading: false
+  })
+}
+
+export function requestUserMenuByRoleId(id: number) {
+  return mxRequest.get<IDataType>({
+    url: LoginAPI.UserMenus + id + '/menu',
+    showLoading: false
   })
 }
