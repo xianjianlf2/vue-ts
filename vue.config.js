@@ -5,7 +5,6 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 module.exports = {
   outputDir: './build',
-  publicPath: './',
   // configureWebpack: {
   //   resolve: {
   //     alias: {
@@ -19,6 +18,18 @@ module.exports = {
   //     views: '@/views'
   //   }
   // },
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://152.136.185.210:5000',
+        pathRewrite: {
+          '^/api': ''
+        },
+        changeOrigin: true
+      }
+    },
+    open: true
+  },
   configureWebpack: {
     plugins: [
       AutoImport({
@@ -29,6 +40,7 @@ module.exports = {
       })
     ]
   },
+
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@', path.resolve(__dirname, 'src'))
