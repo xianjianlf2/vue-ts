@@ -9,7 +9,11 @@ const mxRequest = new MXRequest({
     requestInterceptor: (config) => {
       const token = localCache.getCache('token')
       if (token) {
-        config.headers!.Authorization = `Bearer ${token}`
+        // bug fixed (ts 类型警告 Forbidden non-null assertion.)
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`
+        }
       }
       return config
     },

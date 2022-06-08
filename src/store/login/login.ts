@@ -9,6 +9,7 @@ import {
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -28,6 +29,12 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
+
+      // 动态路由
+      const routes = mapMenusToRoutes(userMenus)
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   actions: {
@@ -35,7 +42,6 @@ const loginModule: Module<ILoginState, IRootState> = {
       // 登录
       const loginResult = await accountLoginRequest(payload)
       const { id, token } = loginResult.data
-      console.log(token)
       commit('changeToken', token)
       localCache.setCache('token', token)
 

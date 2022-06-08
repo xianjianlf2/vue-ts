@@ -83,8 +83,8 @@ class MXRequest {
       }
 
       // 判断是否需要显示loading
-      if (config.showLoading === false) {
-        this.showLoading = config.showLoading
+      if (!config.showLoading as boolean) {
+        this.showLoading = !config.showLoading
       }
 
       this.instance
