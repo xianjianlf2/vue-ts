@@ -49,20 +49,15 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
-import { computed, defineProps, withDefaults } from 'vue'
+import { computed, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 
 const store = useStore()
 const router = useRouter()
 const userMenus = computed(() => store.state.login.userMenus)
-const props = withDefaults(
-  defineProps<{
-    collapse: boolean
-  }>(),
-  {
-    collapse: false
-  }
-)
+const props = defineProps({
+  collapse: { type: Boolean, default: false }
+})
 
 // 切割图标
 const splitIcon = computed(() => {

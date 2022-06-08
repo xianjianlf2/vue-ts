@@ -12,9 +12,14 @@ const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
-app.use(router as any)
+
 app.use(store as any)
-app.mount('#app')
+// bug fixed 刷新页面 跳到 not found
+// setupStore() 注册动态路由 => app.use(router) 匹配路由
 
 // 加载本地缓存
 setupStore()
+// 匹配路由
+app.use(router as any)
+
+app.mount('#app')
