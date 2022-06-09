@@ -75,7 +75,7 @@ class MXRequest {
     )
   }
 
-  request<T>(config: MXRequestConfig<T>): Promise<T> {
+  request<T = any>(config: MXRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 单个请求对请求config的处理
       if (config.interceptors?.requestInterceptor) {
@@ -109,19 +109,19 @@ class MXRequest {
     })
   }
 
-  get<T>(config: MXRequestConfig<T>): Promise<T> {
+  get<T = any>(config: MXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: MXRequestConfig<T>): Promise<T> {
+  post<T = any>(config: MXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: MXRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: MXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: MXRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: MXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

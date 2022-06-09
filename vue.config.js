@@ -19,11 +19,10 @@ module.exports = {
   //   }
   // },
   devServer: {
-    open: true,
     proxy: {
       '^/api': {
-        // target: 'http://152.136.185.210:5000',
-        target: 'http://localhost:3000',
+        target: 'http://152.136.185.210:5000',
+        // target: 'http://localhost:3000',
         pathRewrite: {
           '^/api': ''
         },

@@ -41,11 +41,13 @@ const breadcrumbs = computed(() => {
 <style scoped lang="less">
 .nav-header {
   display: flex;
+  width: 100%;
 
   .fold-menu {
     font-size: 30px;
     cursor: pointer;
   }
+
   .content {
     display: flex;
     justify-content: space-between;

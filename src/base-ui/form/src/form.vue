@@ -64,7 +64,10 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  formItems: { type: Array as PropType<IFormItem[]>, default: () => [] },
+  formItems: {
+    type: Array as PropType<IFormItem[]>,
+    default: () => []
+  },
   labelWidth: {
     type: String,
     default: '100px'

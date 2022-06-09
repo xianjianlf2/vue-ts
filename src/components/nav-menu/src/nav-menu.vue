@@ -91,6 +91,7 @@ const handleMenuItemClick = (item: any) => {
     display: flex;
     align-items: center;
     padding: 10px 20px;
+    height: 30px;
     .logo {
       width: 28px;
       height: 30px;
