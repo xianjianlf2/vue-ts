@@ -6,13 +6,7 @@
       </el-icon>
     </div>
     <div class="content">
-      <el-breadcrumb :separator-icon="ArrowRight">
-        <template v-for="route in currentRoutes" :key="route">
-          <el-breadcrumb-item :to="{ path: `/${route}` }">
-            {{ route }}
-          </el-breadcrumb-item>
-        </template>
-      </el-breadcrumb>
+      <MxBreadcrumb :breadcrumbs="breadcrumbs"></MxBreadcrumb>
       <UserInfo></UserInfo>
     </div>
   </div>
@@ -21,19 +15,27 @@
 <script setup lang="ts">
 import { ref, defineEmits, computed } from 'vue'
 import UserInfo from './cpns/user-info.vue'
-import { ArrowRight } from '@element-plus/icons-vue'
+import MxBreadcrumb, { IBreadcrumb } from '@/base-ui/breadcrumb'
+import { pathMapBreadcrumbs } from '@/utils/map-menus'
+import { useStore } from '@/store'
 import { useRoute } from 'vue-router'
 
 // 定义emit
 const emit = defineEmits(['foldChange'])
 const isFold = ref(false)
-const routes = useRoute()
 
-const currentRoutes = computed(() => routes.fullPath.split('/').slice(1))
 const changeFold = () => {
   isFold.value = !isFold.value
   emit('foldChange', isFold.value)
 }
+
+const store = useStore()
+
+const breadcrumbs = computed(() => {
+  const userMenus = store.state.login.userMenus
+  const currentPath = useRoute().path
+  return pathMapBreadcrumbs(userMenus, currentPath)
+})
 </script>
 
 <style scoped lang="less">
