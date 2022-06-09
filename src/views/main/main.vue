@@ -1,12 +1,12 @@
 <template>
-  <div class="main">
+  <div class="main-area">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <NavMenu :collapse="isCollapse"></NavMenu>
+        <nav-menu :collapse="isCollapse"></nav-menu>
       </el-aside>
       <el-container class="page">
         <el-header>
-          <NavHeader @fold-change="handleFoldChange"></NavHeader>
+          <nav-header @fold-change="handleFoldChange"></nav-header>
         </el-header>
         <el-main>
           <router-view></router-view>
@@ -29,7 +29,7 @@ const handleFoldChange = (isFold: boolean) => {
 </script>
 
 <style scoped lang="less">
-.main {
+.main-area {
   height: 100%;
   width: 100%;
 }

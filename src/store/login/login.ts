@@ -48,11 +48,11 @@ const loginModule: Module<ILoginState, IRootState> = {
       // 请求用户信息
       const userInfoResult = await requestUserInfoById(id)
       const userInfo = userInfoResult.data
-      console.log(userInfo)
       commit('changeUserInfo', userInfo)
       localCache.setCache('userInfo', userInfo)
 
       // 请求用户菜单
+      console.log(userInfo.role.id)
       const userMenuResult = await requestUserMenuByRoleId(userInfo.role.id)
       const userMenus = userMenuResult.data
       console.log(userMenus)

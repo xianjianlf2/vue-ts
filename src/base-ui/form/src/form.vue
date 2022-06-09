@@ -1,8 +1,11 @@
 <template>
   <div class="mx-form">
-    <el-form :label-width="labelWidth">
+    <div class="header">
+      <slot name="header"></slot>
+    </div>
+    <el-form :label-width="props.labelWidth">
       <el-row>
-        <template v-for="item in formItems" :key="item.label">
+        <template v-for="item in props.formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
               :label="item.label"
@@ -16,6 +19,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
+                  v-model="formData[`${item.field}`]"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -23,6 +27,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
+                  v-model="formData[`${item.field}`]"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -34,6 +39,7 @@
               </template>
               <template v-else-if="item.type === 'datepicker'">
                 <el-date-picker
+                  v-model="formData[`${item.field}`]"
                   style="width: 100%"
                   v-bind="item.otherOptions"
                 ></el-date-picker>
@@ -43,16 +49,22 @@
         </template>
       </el-row>
     </el-form>
+    <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
+import { defineProps, PropType, ref, defineEmits, watch } from 'vue'
 import { IFormItem } from '../types'
 
-defineProps({
-  formItems: Array as PropType<IFormItem[]>,
-  default: () => [],
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
+  },
+  formItems: { type: Array as PropType<IFormItem[]>, default: () => [] },
   labelWidth: {
     type: String,
     default: '100px'
@@ -72,10 +84,20 @@ defineProps({
     })
   }
 })
+
+const emit = defineEmits(['update:modelValue'])
+// 双向绑定 浅拷贝
+// https://stackoverflow.com/questions/71257252/submit-a-form-and-fire-parent-method-when-child-emitted-event-is-received-in-vue
+// bug fix 单向数据流
+const formData = ref({ ...props.modelValue })
+watch(formData, (newValue) => emit('update:modelValue', newValue), {
+  deep: true
+})
 </script>
 
 <style scoped lang="less">
 .mx-form {
-  padding-top: 22px;
+  background: #fff;
+  padding: 20px 20px 20px 0;
 }
 </style>

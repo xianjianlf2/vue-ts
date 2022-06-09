@@ -6,8 +6,8 @@
       </el-icon>
     </div>
     <div class="content">
-      <MxBreadcrumb :breadcrumbs="breadcrumbs"></MxBreadcrumb>
-      <UserInfo></UserInfo>
+      <mx-breadcrumb :breadcrumbs="breadcrumbs"></mx-breadcrumb>
+      <user-info></user-info>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref, defineEmits, computed } from 'vue'
 import UserInfo from './cpns/user-info.vue'
-import MxBreadcrumb, { IBreadcrumb } from '@/base-ui/breadcrumb'
+import MxBreadcrumb from '@/base-ui/breadcrumb'
 import { pathMapBreadcrumbs } from '@/utils/map-menus'
 import { useStore } from '@/store'
 import { useRoute } from 'vue-router'

@@ -1,14 +1,14 @@
 <template>
   <div class="user">
-    <mx-form v-bind="searchFormConfig"></mx-form>
-
+    <page-search :search-form-config="searchFormConfig"></page-search>
     <div class="content"></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import MxForm from '@/base-ui/form'
+import { ref } from 'vue'
 import { searchFormConfig } from './config/search.config'
+import PageSearch from '@/components/page-search'
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>
