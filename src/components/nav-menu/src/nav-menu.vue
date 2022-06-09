@@ -5,7 +5,7 @@
       <span class="title" v-show="!props.collapse">后台管理系统</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultValue"
       class="el-menu-vertical-demo"
       :collapse="props.collapse"
     >
@@ -49,12 +49,22 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
-import { computed, defineProps } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, defineProps, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { pathMapToMenu } from '@/utils/map-menus'
 
+// store
 const store = useStore()
-const router = useRouter()
 const userMenus = computed(() => store.state.login.userMenus)
+
+// router
+const router = useRouter()
+const route = useRoute()
+const currentPath = route.path
+
+// 展开
+const menu = pathMapToMenu(userMenus.value, currentPath)
+const defaultValue = ref(menu.id + '')
 const props = defineProps({
   collapse: { type: Boolean, default: false }
 })
@@ -92,14 +102,24 @@ const handleMenuItemClick = (item: any) => {
     }
   }
   .el-menu {
+    color: #fff;
     border-right: 0;
+
     .el-menu-item:hover {
-      color: #fff;
-      background-color: #1c3146;
+      background-color: #0a60bd;
     }
-    .el-sub-menu .el-menu-item {
-      padding-left: 50px !important;
-      background-color: #15293c;
+    .el-sub-menu,
+    .el-menu-item {
+      // padding-left: 5px !important;
+      background-color: #0c2135;
+    }
+    .el-sub-menu {
+      .el-icon {
+        color: #fff;
+      }
+      span {
+        color: #fff;
+      }
     }
     .el-menu-item.is-active {
       color: #fff;
