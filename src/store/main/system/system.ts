@@ -3,12 +3,19 @@ import { Module } from 'vuex'
 import { ISystemState } from './types'
 import { getPageListData } from '@/service/main/system/system'
 
+const pageUrlMap: Map<string, string> = new Map([
+  ['user', '/users/list'],
+  ['system', '/role/list']
+])
+
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
   state() {
     return {
       userList: [],
-      userCount: 0
+      userCount: 0,
+      roleList: [],
+      roleCount: 0
     }
   },
   mutations: {
@@ -17,21 +24,27 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeUserCount(state, userCount: number) {
       state.userCount = userCount
+    },
+    changeRoleList(state, list: any[]) {
+      state.userList = list
+    },
+    changeRoleCount(state, count: number) {
+      state.userCount = count
     }
   },
   actions: {
+    // 发送请求
     async getPageListAction({ commit }, payload: any) {
-      console.log(payload.pageUrl)
-      console.log(payload.queryInfo)
+      const pageName = payload.pageName
+      const pageUrl = pageUrlMap.get(pageName) || ''
 
       // 对页面发送请求
-      const pageResult = await getPageListData(
-        payload.pageUrl,
-        payload.queryInfo
-      )
+      const pageResult = await getPageListData(pageUrl, payload.queryInfo)
+
+      // 数据存到state
       const { list, totalCount } = pageResult.data
-      commit('changeUserList', list)
-      commit('changeUserCount', totalCount)
+      commit(`change${pageName.toUpperCase()}List`, list)
+      commit(`change${pageName.toUpperCase()}Count`, totalCount)
     }
   }
 }

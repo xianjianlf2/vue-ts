@@ -105,14 +105,13 @@ const handleMenuItemClick = (item: any) => {
   .el-menu {
     color: #fff;
     border-right: 0;
-
     .el-menu-item:hover {
-      background-color: #0a60bd;
+      color: #fff !important; // 菜单
     }
     .el-sub-menu,
     .el-menu-item {
       // padding-left: 5px !important;
-      background-color: #0c2135;
+      background-color: #001529;
     }
     .el-sub-menu {
       .el-icon {
