@@ -3,48 +3,53 @@ import { Module } from 'vuex'
 import { ISystemState } from './types'
 import { getPageListData } from '@/service/main/system/system'
 
-const pageUrlMap: Map<string, string> = new Map([
-  ['user', '/users/list'],
-  ['system', '/role/list']
-])
-
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
   state() {
     return {
-      userList: [],
-      userCount: 0,
+      usersList: [],
+      usersCount: 0,
       roleList: [],
       roleCount: 0
     }
   },
+  getters: {
+    pageListData(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}List`]
+      }
+    }
+  },
   mutations: {
-    changeUserList(state, userList: any[]) {
-      state.userList = userList
+    changeUsersList(state, userList: any[]) {
+      state.usersList = userList
     },
-    changeUserCount(state, userCount: number) {
-      state.userCount = userCount
+    changeUsersCount(state, userCount: number) {
+      state.usersCount = userCount
     },
     changeRoleList(state, list: any[]) {
-      state.userList = list
+      state.roleList = list
     },
     changeRoleCount(state, count: number) {
-      state.userCount = count
+      state.roleCount = count
     }
   },
   actions: {
     // 发送请求
     async getPageListAction({ commit }, payload: any) {
       const pageName = payload.pageName
-      const pageUrl = pageUrlMap.get(pageName) || ''
+      const pageUrl = `/${pageName}/list`
 
       // 对页面发送请求
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
-
-      // 数据存到state
+      console.log(pageResult)
+      // 将数据存储到state中
       const { list, totalCount } = pageResult.data
-      commit(`change${pageName.toUpperCase()}List`, list)
-      commit(`change${pageName.toUpperCase()}Count`, totalCount)
+      // 数据存到state
+      const changePageName =
+        pageName.slice(0, 1).toUpperCase() + pageName.slice(1)
+      commit(`change${changePageName}List`, list)
+      commit(`change${changePageName}Count`, totalCount)
     }
   }
 }

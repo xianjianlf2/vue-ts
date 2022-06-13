@@ -1,21 +1,26 @@
 <template>
   <div class="user">
-    <page-search :search-form-config="searchFormConfig"></page-search>
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @queryBtnClick="handleQueryClick"
+    />
     <page-content
+      ref="pageContentRef"
       :contentTableConfig="contentTableConfig"
-      pageName="user"
+      pageName="users"
     ></page-content>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { searchFormConfig } from './config/search.config'
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
-
+import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
+import { usePageSearch } from '@/hooks/use-page-search'
 
-// const userCount = computed(() => store.state.system.userCount)
+const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
 </script>
 
-<style scoped lang="less"></style>
+<style scoped></style>
