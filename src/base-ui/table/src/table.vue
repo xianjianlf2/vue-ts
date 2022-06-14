@@ -12,6 +12,7 @@
       :data="props.listData"
       border
       style="width: 100%"
+      v-bind="props.childrenProps"
       @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -28,7 +29,7 @@
         width="80"
       ></el-table-column>
       <template v-for="propItem in props.propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" align="center">
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="(propItem as any).slotName" :row="scope.row">
               {{ scope.row[(propItem as any).prop] }}
@@ -82,10 +83,6 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  page: {
-    type: Object,
-    default: () => ({ currentPage: 0, pageSize: 10 })
-  },
   childrenProps: {
     type: Object,
     default: () => ({})
@@ -93,10 +90,14 @@ const props = defineProps({
   showFooter: {
     type: Boolean,
     default: true
+  },
+  page: {
+    type: Object,
+    default: () => ({ currentPage: 0, pageSize: 10 })
   }
 })
 
-const emit = defineEmits(['selectionChange', 'update:page', 'update:page'])
+const emit = defineEmits(['selectionChange', 'update:page'])
 const handleSelectionChange = (value: any) => {
   emit('selectionChange', value)
 }

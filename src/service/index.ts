@@ -1,6 +1,8 @@
 import MXRequest from './request'
 import { BASE_URL, TIME_OUT } from './request/config'
 import localCache from '@/utils/cache'
+import router from '@/router'
+import { ElMessage } from 'element-plus'
 
 const mxRequest = new MXRequest({
   baseURL: BASE_URL,
@@ -27,6 +29,15 @@ const mxRequest = new MXRequest({
     },
     responseInterceptorCatch: (err) => {
       console.log('响应失败拦截')
+      if (err.response.status === 401) {
+        ElMessage({ message: '请先登录', type: 'success', center: true })
+        localCache.deleteCache('token')
+        const login = {
+          path: '/login',
+          query: { redirect: router.currentRoute.value.path }
+        }
+        return router.push(login)
+      }
       return err
     }
   }

@@ -9,7 +9,7 @@ import {
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
 import router from '@/router'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToPermission, mapMenusToRoutes } from '@/utils/map-menus'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -17,7 +17,8 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     }
   },
   mutations: {
@@ -35,6 +36,10 @@ const loginModule: Module<ILoginState, IRootState> = {
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+
+      // 获取用户按钮权限
+      const permissions = mapMenusToPermission(userMenus)
+      state.permissions = permissions
     }
   },
   actions: {
@@ -52,13 +57,18 @@ const loginModule: Module<ILoginState, IRootState> = {
       localCache.setCache('userInfo', userInfo)
 
       // 请求用户菜单
-      console.log(userInfo.role.id)
       const userMenuResult = await requestUserMenuByRoleId(userInfo.role.id)
       const userMenus = userMenuResult.data
       console.log(userMenus)
       commit('changeUserMenus', userMenus)
       localCache.setCache('userMenus', userMenus)
-
+      if (router.currentRoute.value.query) {
+        const redirect = router.currentRoute.value.query.redirect
+        if (typeof redirect === 'string') {
+          // 跳到首页
+          router.push(redirect)
+        }
+      }
       // 跳到首页
       router.push('/main')
     },
