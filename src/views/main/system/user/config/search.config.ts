@@ -22,7 +22,7 @@ export const searchFormConfig: IForm = {
       placeholder: '请输入真实姓名'
     },
     {
-      field: 'createAt',
+      field: 'createTime',
       type: 'datepicker',
       label: '创建时间',
       otherOptions: {

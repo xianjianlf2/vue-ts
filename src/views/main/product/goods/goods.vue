@@ -2,7 +2,7 @@
   <div class="goods">
     <page-content
       ref="pageContentRef"
-      :contentTableConfig="contentTableConfig"
+      :contentConfig="contentTableConfig"
       pageName="goods"
     >
       <template #oldPrice="scope">

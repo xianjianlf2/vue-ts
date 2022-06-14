@@ -2,7 +2,7 @@
   <div class="menu">
     <page-content
       ref="pageContentRef"
-      :contentTableConfig="contentTableConfig"
+      :contentConfig="contentTableConfig"
       pageName="menu"
     ></page-content>
   </div>

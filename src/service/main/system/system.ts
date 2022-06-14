@@ -1,9 +1,16 @@
-import hyRequest from '../../index'
+import mxRequest from '../../index'
 import { IDataType } from '../../types'
 
 export function getPageListData(url: string, queryInfo: any) {
-  return hyRequest.post<IDataType>({
+  return mxRequest.post<IDataType>({
     url: url,
     data: queryInfo
+  })
+}
+
+// url: /users/id
+export function deletePageData(url: string) {
+  return mxRequest.delete<IDataType>({
+    url: url
   })
 }

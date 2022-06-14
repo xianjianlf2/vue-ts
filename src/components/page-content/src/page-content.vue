@@ -1,16 +1,21 @@
 <template>
   <div class="page-content">
     <mx-table
-      :listData="dataList"
+      :listData="pageListData"
       v-bind="contentTableConfig"
-      :listCount="dataCount"
+      :listCount="totalCount"
       v-model:page="pageInfo"
     >
       <!-- 1.header中的插槽 -->
       <template #headerHandler>
-        <el-button type="primary" size="medium" v-if="isCreate"
-          >新建用户</el-button
+        <el-button
+          v-if="isCreate"
+          type="primary"
+          size="medium"
+          @click="handleNewData"
         >
+          {{ contentTableConfig.newBtnTitle ?? '新建数据' }}
+        </el-button>
       </template>
 
       <!-- 2.列中的插槽 -->
@@ -29,7 +34,7 @@
       <template #updateAt="scope">
         <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div class="handle-btns">
           <el-button
             icon="el-icon-edit"
@@ -37,6 +42,7 @@
             link
             type="primary"
             v-if="isUpdate"
+            @click="handleEditClick(scope.row)"
             >编辑</el-button
           >
           <el-button
@@ -45,6 +51,7 @@
             link
             type="primary"
             v-if="isDelete"
+            @click="handleDeleteClick(scope.row)"
             >删除</el-button
           >
         </div>
@@ -65,7 +72,14 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed, defineExpose, ref, watch } from 'vue'
+import {
+  defineProps,
+  computed,
+  defineExpose,
+  ref,
+  watch,
+  defineEmits
+} from 'vue'
 import { useStore } from '@/store'
 import MxTable from '@/base-ui/table'
 import { usePermission } from '@/hooks/use-permission'
@@ -80,6 +94,9 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['newBtnClick', 'editBtnClick'])
+
 // 获取按钮权限
 const isCreate = usePermission(props.pageName, 'create')
 const isUpdate = usePermission(props.pageName, 'update')
@@ -87,8 +104,8 @@ const isQuery = usePermission(props.pageName, 'query')
 const isDelete = usePermission(props.pageName, 'delete')
 
 const store = useStore()
+const pageInfo = ref({ currentPage: 1, pageSize: 10 })
 
-const pageInfo = ref({ currentPage: 0, pageSize: 10 })
 watch(pageInfo, () => {
   getPageData()
 })
@@ -99,7 +116,7 @@ const getPageData = (queryInfo: any = {}) => {
   store.dispatch('system/getPageListAction', {
     pageName: props.pageName,
     queryInfo: {
-      offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+      offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
       size: pageInfo.value.pageSize,
       ...queryInfo
     }
@@ -107,10 +124,10 @@ const getPageData = (queryInfo: any = {}) => {
 }
 getPageData()
 // vuex获取数据
-const dataList = computed(() =>
+const pageListData = computed(() =>
   store.getters[`system/pageListData`](props.pageName)
 )
-const dataCount = computed(() =>
+const totalCount = computed(() =>
   store.getters[`system/pageListCount`](props.pageName)
 )
 
@@ -132,6 +149,22 @@ const otherPropSlots = props.contentTableConfig?.propList.filter(
     return true
   }
 )
+
+// 编辑/删除
+const handleDeleteClick = (item: any) => {
+  store.dispatch('system/deletePageDataAction', {
+    pageName: props.pageName,
+    id: item.id
+  })
+}
+
+// 新建
+const handleNewData = () => {
+  emit('newBtnClick')
+}
+const handleEditClick = (item: any) => {
+  emit('editBtnClick', item)
+}
 
 defineExpose({
   getPageData
