@@ -2,7 +2,7 @@
   <div class="page-content">
     <mx-table
       :listData="pageListData"
-      v-bind="contentTableConfig"
+      v-bind="props.contentTableConfig"
       :listCount="totalCount"
       v-model:page="pageInfo"
     >
@@ -11,10 +11,10 @@
         <el-button
           v-if="isCreate"
           type="primary"
-          size="medium"
+          size="default"
           @click="handleNewData"
         >
-          {{ contentTableConfig.newBtnTitle ?? '新建数据' }}
+          {{ props.contentTableConfig?.newBtnTitle ?? '新建数据' }}
         </el-button>
       </template>
 

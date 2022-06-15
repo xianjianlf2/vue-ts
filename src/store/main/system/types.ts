@@ -8,3 +8,10 @@ export interface ISystemState {
   menuList: any[]
   menuCount: number
 }
+
+export interface IPagePayload {
+  pageName: string
+  // pageUrl: string
+  queryInfo: any
+  id?: number
+}

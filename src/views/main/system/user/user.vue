@@ -15,7 +15,8 @@
     <page-modal
       :defaultInfo="defaultInfo"
       ref="pageModalRef"
-      :modalConfig="modalConfig"
+      pageName="users"
+      :modalConfig="modalConfigRef"
     ></page-modal>
   </div>
 </template>
@@ -31,8 +32,13 @@ import { modalConfig } from './config/modal.config'
 
 import { usePageSearch } from '@/hooks/use-page-search'
 import { usePageModal } from '@/hooks/use-page-modal'
+import { useStore } from '@/store'
+import { IFormItem } from '@/base-ui/form'
+import { computed } from 'vue'
 
 // pageModal 相关的hook逻辑
+// 处理密码的逻辑
+
 const newCallback = () => {
   const passwordItem = modalConfig.formItems.find(
     (item) => item.field === 'password'
@@ -50,6 +56,25 @@ const editCallback = () => {
   }
 }
 
+// 动态添加部门和角色列表
+const store = useStore()
+const modalConfigRef = computed(() => {
+  const roleOption: IFormItem | undefined = modalConfig.formItems?.find(
+    (item) => item.field === 'roleId'
+  )
+  roleOption!.options = store.state.entireRoles.map((item: any) => {
+    return { label: item.name, value: item.id }
+  })
+  const departmentOption: IFormItem | undefined = modalConfig.formItems?.find(
+    (item) => item.field === 'departmentId'
+  )
+  departmentOption!.options = store.state.entireDepartments.map((item: any) => {
+    return { label: item.name, value: item.id }
+  })
+  return modalConfig
+})
+
+// 调用hook获取公共变量和函数
 const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
 const [pageModalRef, defaultInfo, handleNewData, handleEditData] = usePageModal(
   newCallback,

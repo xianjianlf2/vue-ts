@@ -2,7 +2,7 @@
   <div class="role">
     <page-search :searchFormConfig="searchFormConfig"></page-search>
     <page-content
-      :contentConfig="contentTableConfig"
+      :contentTableConfig="contentTableConfig"
       pageName="role"
     ></page-content>
   </div>

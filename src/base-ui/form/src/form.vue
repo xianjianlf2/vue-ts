@@ -36,6 +36,7 @@
                     v-for="option in item.options"
                     :key="option.value"
                     :value="option.value"
+                    :label="option.label"
                     >{{ option.label }}</el-option
                   >
                 </el-select>

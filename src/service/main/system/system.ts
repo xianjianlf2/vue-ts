@@ -14,3 +14,17 @@ export function deletePageData(url: string) {
     url: url
   })
 }
+
+export function newPageData(pageUrl: string, newData: any) {
+  return mxRequest.post({
+    url: pageUrl,
+    data: newData
+  })
+}
+
+export function editPageData(pageUrl: string, editData: any) {
+  return mxRequest.patch({
+    url: pageUrl,
+    data: editData
+  })
+}

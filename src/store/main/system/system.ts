@@ -1,7 +1,12 @@
 import { IRootState } from '../../types'
 import { Module } from 'vuex'
-import { ISystemState } from './types'
-import { deletePageData, getPageListData } from '@/service/main/system/system'
+import { IPagePayload, ISystemState } from './types'
+import {
+  deletePageData,
+  editPageData,
+  getPageListData,
+  newPageData
+} from '@/service/main/system/system'
 
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
@@ -73,7 +78,7 @@ const systemModule: Module<ISystemState, IRootState> = {
       commit(`change${changePageName}Count`, totalCount)
     },
 
-    async deletePageDataAction({ dispatch }, payload: any) {
+    async deletePageDataAction({ dispatch }, payload: IPagePayload) {
       const { pageName, id } = payload
       const pageUrl = `/${pageName}/${id}`
       await deletePageData(pageUrl)
@@ -85,6 +90,29 @@ const systemModule: Module<ISystemState, IRootState> = {
           offset: 0,
           size: 10
         }
+      })
+    },
+
+    async newPageDataAction({ dispatch }, payload: IPagePayload) {
+      const pageUrl = `/${payload.pageName}`
+      const pageData = payload.queryInfo
+      await newPageData(pageUrl, pageData)
+
+      dispatch('getPageListDataAction', {
+        pageName: payload.pageName,
+        queryInfo: { offset: 0, size: 10 }
+      })
+    },
+
+    async editPageDataAction({ dispatch }, payload: IPagePayload) {
+      if (!payload.id) return
+      const pageUrl = `/${payload.pageName}/${payload.id}`
+      const pageData = payload.queryInfo
+      await editPageData(pageUrl, pageData)
+
+      dispatch('getPageListDataAction', {
+        pageName: payload.pageName,
+        queryInfo: { offset: 0, size: 10 }
       })
     }
   }
