@@ -1,10 +1,10 @@
-import { ISystemState } from './main/system/types'
 import { ILoginState } from './login/types'
+import { ISystemState } from './main/system/types'
 
 export interface IRootState {
-  entireRoles: any[]
-  entireDepartments: any[]
-  entireMenus: any[]
+  entireDepartment: any[]
+  entireRole: any[]
+  entireMenu: any[]
 }
 
 export interface IRootWithModule {

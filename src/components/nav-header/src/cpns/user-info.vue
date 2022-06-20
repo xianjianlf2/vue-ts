@@ -1,6 +1,6 @@
 <template>
   <div class="userInfo">
-    <el-dropdown @command="handleCommand">
+    <el-dropdown>
       <span class="el-dropdown-link">
         <el-avatar
           size="small"
@@ -16,7 +16,7 @@
           <el-dropdown-item command="system"
             ><el-icon><Setting /></el-icon>系统管理</el-dropdown-item
           >
-          <el-dropdown-item divided command="exit"
+          <el-dropdown-item divided command="exit" @click="handleExitClick"
             ><el-icon><SwitchButton /></el-icon>退出登录</el-dropdown-item
           >
         </el-dropdown-menu>
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
-import cache from '@/utils/cache'
+import localCache from '@/utils/cache'
 import { ElMessage } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -36,20 +36,24 @@ const store = useStore()
 const name = computed(() => store.state.login.userInfo.name)
 const router = useRouter()
 
-const handleCommand = (command: string) => {
-  switch (command) {
-    case 'userInfo':
-      router.push('/main')
-      break
-    case 'system':
-      router.push('/main')
-      break
-    case 'exit':
-      router.push('/login')
-      cache.deleteCache('token')
-      ElMessage({ message: '退出登录', type: 'success', center: true })
-      break
-  }
+// const handleCommand = (command: string) => {
+//   switch (command) {
+//     case 'userInfo':
+//       router.push('/main')
+//       break
+//     case 'system':
+//       router.push('/main')
+//       break
+//     case 'exit':
+//       router.push('/login')
+//       cache.deleteCache('token')
+//       ElMessage({ message: '退出登录', type: 'success', center: true })
+//       break
+//   }
+// }
+const handleExitClick = () => {
+  localCache.deleteCache('token')
+  router.push('/main')
 }
 </script>
 

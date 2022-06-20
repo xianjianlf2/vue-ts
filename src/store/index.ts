@@ -1,29 +1,35 @@
 import { createStore, Store, useStore as useVuexStore } from 'vuex'
-import { IRootState, IStoreType } from './types'
+
 import login from './login/login'
 import system from './main/system/system'
+
 import { getPageListData } from '@/service/main/system/system'
+
+import { IRootState, IStoreType } from './types'
 
 const store = createStore<IRootState>({
   state() {
     return {
-      entireDepartments: [],
-      entireRoles: [],
-      entireMenus: []
+      entireDepartment: [],
+      entireRole: [],
+      entireMenu: []
     }
   },
   mutations: {
     changeEntireDepartment(state, list) {
-      state.entireDepartments = list
+      state.entireDepartment = list
     },
     changeEntireRole(state, list) {
-      state.entireRoles = list
+      state.entireRole = list
+    },
+    changeEntireMenu(state, list) {
+      state.entireMenu = list
     }
   },
+  getters: {},
   actions: {
     async getInitialDataAction({ commit }) {
-      // 请求部门和角色数据
-
+      // 1.请求部门和角色数据
       const departmentResult = await getPageListData('/department/list', {
         offset: 0,
         size: 1000
@@ -34,10 +40,13 @@ const store = createStore<IRootState>({
         size: 1000
       })
       const { list: roleList } = roleResult.data
+      const menuResult = await getPageListData('/menu/list', {})
+      const { list: menuList } = menuResult.data
 
-      // 保存数据
+      // 2.保存数据
       commit('changeEntireDepartment', departmentList)
       commit('changeEntireRole', roleList)
+      commit('changeEntireMenu', menuList)
     }
   },
   modules: {
@@ -48,7 +57,7 @@ const store = createStore<IRootState>({
 
 export function setupStore() {
   store.dispatch('login/loadLocalLogin')
-  store.dispatch('getInitialDataAction')
+  // store.dispatch('getInitialDataAction')
 }
 
 export function useStore(): Store<IStoreType> {

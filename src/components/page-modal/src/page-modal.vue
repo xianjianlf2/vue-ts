@@ -8,6 +8,7 @@
       destroy-on-close
     >
       <mx-form v-bind="modalConfig" v-model="formData"></mx-form>
+      <slot></slot>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -36,6 +37,10 @@ const props = defineProps({
   pageName: {
     type: String,
     require: true
+  },
+  otherInfo: {
+    type: Object,
+    default: () => ({})
   }
 })
 const formData = ref<any>({})
@@ -57,7 +62,7 @@ const handleConfirmClick = () => {
     console.log('编辑用户')
     store.dispatch('system/editPageDataAction', {
       pageName: props.pageName,
-      editData: { ...formData.value },
+      editData: { ...formData.value, ...props.otherInfo },
       id: props.defaultInfo.id
     })
   } else {
@@ -65,7 +70,7 @@ const handleConfirmClick = () => {
     console.log('新建用户')
     store.dispatch('system/createPageDataAction', {
       pageName: props.pageName,
-      newData: { ...formData.value }
+      newData: { ...formData.value, ...props.otherInfo }
     })
   }
 }

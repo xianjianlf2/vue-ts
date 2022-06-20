@@ -1,8 +1,9 @@
-import mxRequest from '../../index'
+import hyRequest from '../../index'
+
 import { IDataType } from '../../types'
 
 export function getPageListData(url: string, queryInfo: any) {
-  return mxRequest.post<IDataType>({
+  return hyRequest.post<IDataType>({
     url: url,
     data: queryInfo
   })
@@ -10,21 +11,21 @@ export function getPageListData(url: string, queryInfo: any) {
 
 // url: /users/id
 export function deletePageData(url: string) {
-  return mxRequest.delete<IDataType>({
+  return hyRequest.delete<IDataType>({
     url: url
   })
 }
 
-export function newPageData(pageUrl: string, newData: any) {
-  return mxRequest.post({
-    url: pageUrl,
+export function createPageData(url: string, newData: any) {
+  return hyRequest.post<IDataType>({
+    url: url,
     data: newData
   })
 }
 
-export function editPageData(pageUrl: string, editData: any) {
-  return mxRequest.patch({
-    url: pageUrl,
+export function editPageData(url: string, editData: any) {
+  return hyRequest.patch<IDataType>({
+    url: url,
     data: editData
   })
 }
